@@ -1,0 +1,45 @@
+server {
+    server_name ~^(?<subdomain>.+)\.neon\.web\.id$;
+
+    root /home/bambang/sites/neon/$subdomain;
+
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+    
+    error_page 404 https://neon.web.id;
+
+    location ~\.php$ {
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock; # sesuaikan dengan versi php yang digunakan atau gunakan upstream
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+        include snippets/fastcgi-php.conf;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+
+    location ~* /(?:uploads|files)/.*\.php$ {
+        deny all;
+    }
+
+    # Media: images, icons, video, audio, HTC
+    location ~* \.(jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
+            expires 356d;
+            access_log off;
+            add_header Cache-Control "public, no-transform";
+    }
+
+    # CSS and Javascript
+    location ~* \.(css|js)$ {
+            expires 2d;
+            access_log off;
+            add_header Cache-Control "public, no-transform";
+    }
+
+    listen 80;
+
+}
