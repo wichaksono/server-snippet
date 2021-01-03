@@ -11,20 +11,6 @@ server {
     expires 90d;
     root /var/www/cdn/;
   }
-  
-  # Media: images, icons, video, audio, HTC
-  location ~* \.(jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm|htc)$ {
-          expires max;
-          access_log off;
-          add_header Cache-Control "public, no-transform";
-  }
-
-  # CSS and Javascript
-  location ~* \.(css|js)$ {
-          expires max;
-          access_log off;
-          add_header Cache-Control "public, no-transform";
-  }
 }
 
 # Kenapa kok Portnya 80? kok bukan 443?
